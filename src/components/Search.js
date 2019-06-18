@@ -1,54 +1,89 @@
-import React, { useState } from "react";
+import React from "react";
+import pick from "lodash.pick";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { connect } from "react-redux";
 import { KEY } from "../token";
 import "./style.scss";
 
-const Search = () => {
-  // eslint-disable-next-line
-  const [text, setText] = useState("");
-  const [artists, setArtists] = useState();
+class Search extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      text: ""
+    };
+    this.setArtist = this.props.setArtist;
+  }
 
-  const onChange = text => {
-    setText(text);
-    getArtists();
+  onEnter = () => {
+    this.getArtists();
   };
 
-  const getArtists = () => {
-    if (text !== "" && text.length >= 2) {
+  onKeyDown = keyVal => {
+    if (keyVal === 13) {
+      this.onEnter();
+    }
+  };
+
+  filterResults = results => {
+    let artists = results["resultsPage"]["results"]["artist"];
+    let filteredResults = [];
+    for (let id in artists) {
+      let artist = artists[id];
+      filteredResults.push(pick(artist, ["id", "displayName"]));
+    }
+    return filteredResults;
+  };
+
+  getArtists = () => {
+    if (this.state.text !== "" && this.state.text.length >= 2) {
       fetch(
-        `http://ws.audioscrobbler.com/2.0/?method=artist.search&artist=${text}&api_key=${KEY}&limit=5&format=json`
+        `https://api.songkick.com/api/3.0/search/artists.json?apikey=${KEY}&query=${
+          this.state.text
+        }&per_page=5`
       )
         .then(response => response.json())
         .then(data => {
-          if (data !== (undefined || {})) {
-            try {
-              setArtists(data["results"]["artistmatches"]["artist"]);
-              // TODO: redux
-              console.log(artists);
-            } catch {}
+          let artist = this.filterResults(data)[0];
+          if (artist.displayName !== undefined) {
+            this.setArtist(artist.displayName, artist.id);
+            this.refs.searchinput.value = artist.displayName;
           }
         });
     }
   };
-
-  return (
-    <div className="input-group input-group-lg search shadow">
-      <div className="input-group-prepend">
-        <span className="input-group-text" id="basic-addon1">
-          <FontAwesomeIcon icon={faSearch} />
-        </span>
+  render() {
+    return (
+      <div className="input-group input-group-lg search shadow">
+        <div className="input-group-prepend">
+          <span className="input-group-text" id="basic-addon1">
+            <FontAwesomeIcon icon={faSearch} />
+          </span>
+        </div>
+        <input
+          type="text"
+          ref="searchinput"
+          className="form-control search-input"
+          placeholder="Artist Name"
+          aria-label="Artist Name"
+          aria-describedby="basic-addon1"
+          onChange={e => this.setState({ text: e.target.value })}
+          onKeyDown={e => this.onKeyDown(e.keyCode)}
+        />
       </div>
-      <input
-        type="text"
-        className="form-control search-input"
-        placeholder="Artist Name"
-        aria-label="Artist Name"
-        aria-describedby="basic-addon1"
-        onChange={e => onChange(e.target.value)}
-      />
-    </div>
-  );
+    );
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    setArtist: (name, id) => {
+      dispatch({ type: "SET_ARTIST", name: name, id: id });
+    }
+  };
 };
 
-export default Search;
+export default connect(
+  null,
+  mapDispatchToProps
+)(Search);
