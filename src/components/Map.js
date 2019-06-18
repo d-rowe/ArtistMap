@@ -18,7 +18,6 @@ const Map = () => {
       mapboxApiAccessToken={TOKEN}
       {...viewport}
       onViewportChange={viewport => setViewport(viewport)}
-      onResize={size => console.log(size)}
     />
   );
 };
