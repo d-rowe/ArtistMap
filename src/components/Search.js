@@ -44,10 +44,14 @@ class Search extends React.Component {
       )
         .then(response => response.json())
         .then(data => {
-          let artist = this.filterResults(data)[0];
-          if (artist.displayName !== undefined) {
-            this.setArtist(artist.displayName, artist.id);
-            this.refs.searchinput.value = artist.displayName;
+          try {
+            let artist = this.filterResults(data)[0];
+            if (artist.displayName !== undefined) {
+              this.setArtist(artist.displayName, artist.id);
+              this.refs.searchinput.value = artist.displayName;
+            }
+          } catch {
+            // TODO: altert if no matches
           }
         });
     }
