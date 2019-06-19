@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import ReactMapGL from "react-map-gl";
-import TOKEN from "../token";
+import { TOKEN } from "../token";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 const Map = () => {
