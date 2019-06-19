@@ -26,10 +26,10 @@ class Search extends React.Component {
   };
 
   filterResults = results => {
-    let artists = results["resultsPage"]["results"]["artist"];
+    const artists = results["resultsPage"]["results"]["artist"];
     let filteredResults = [];
     for (let id in artists) {
-      let artist = artists[id];
+      const artist = artists[id];
       filteredResults.push(pick(artist, ["id", "displayName"]));
     }
     return filteredResults;
