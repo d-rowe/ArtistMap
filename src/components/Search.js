@@ -40,7 +40,7 @@ class Search extends React.Component {
       fetch(
         `https://api.songkick.com/api/3.0/search/artists.json?apikey=${KEY}&query=${
           this.state.text
-        }&per_page=5`
+        }&per_page=1`
       )
         .then(response => response.json())
         .then(data => {
