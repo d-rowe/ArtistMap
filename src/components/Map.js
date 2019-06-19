@@ -4,17 +4,16 @@ import pick from "lodash.pick";
 import { TOKEN, KEY } from "../token";
 import { connect } from "react-redux";
 import "mapbox-gl/dist/mapbox-gl.css";
-
 mapboxgl.accessToken = TOKEN;
 
 class Map extends React.Component {
   constructor(props) {
     super(props);
+    this.map = null;
     this.state = {
       latitude: 42.877742,
       longitude: -97.380979,
       zoom: 3,
-      layerAdded: false,
       concerts: []
     };
     this.setConcerts = this.props.setConcerts;
@@ -25,7 +24,7 @@ class Map extends React.Component {
 
     this.map = new mapboxgl.Map({
       container: this.mapContainer,
-      style: "mapbox://styles/mapbox/streets-v9",
+      style: "mapbox://styles/mapbox/light-v9",
       center: [longitude, latitude],
       zoom
     });
@@ -33,42 +32,49 @@ class Map extends React.Component {
     this.getConcerts(this.artistId);
   }
 
-  addLayer = () => {
-    const features = this.state.concerts.map(concert => {
-      return {
-        type: "Feature",
-        geometry: {
-          type: "Point",
-          coordinates: [concert.lng, concert.lat]
-        },
-        properties: {
-          title: concert.displayName,
-          icon: "circle"
-        }
-      };
-    });
-
-    this.map.addLayer({
+  addPoints = map => {
+    const geojson = {
       id: "venues",
-      type: "symbol",
-      source: {
-        type: "geojson",
-        data: {
-          type: "FeatureCollection",
-          features: features
-        }
-      },
-      layout: {
-        "icon-image": "{icon}-15",
-        "icon-allow-overlap": true,
-        'text-allow-overlap': true,
-        // "text-field": "{title}",
-        // "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
-        "text-offset": [0, 0.6],
-        "text-anchor": "top"
-      }
+      type: "FeatureCollection",
+      features: this.state.concerts.map(concert => {
+        return {
+          type: "Feature",
+          properties: {
+            venue: concert.displayName,
+            date: concert.date.toLocaleDateString(),
+            city: concert.city
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [concert.lng, concert.lat]
+          }
+        };
+      })
+    };
+
+    geojson.features.forEach(function(marker) {
+      // create a HTML element for each feature
+      var el = document.createElement("div");
+      el.className = "marker";
+      // make a marker for each feature and add to the map
+      new mapboxgl.Marker(el)
+        .setLngLat(marker.geometry.coordinates)
+        .setPopup(
+          new mapboxgl.Popup({ offset: 25 }) // add popups
+            .setHTML(
+              `<p>
+              ${marker.properties.date}
+              </p>
+              <p> 
+              ${marker.properties.venue}
+              </p>
+              <p> 
+              ${marker.properties.city}
+              </p>`
+            )
+        )
+        .addTo(map);
     });
-    this.setState({ layerAdded: true });
   };
 
   componentWillUnmount() {
@@ -77,10 +83,12 @@ class Map extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (this.props !== prevProps) {
-      if (this.state.layerAdded) {
-        this.map.removeLayer("venues");
-        this.map.removeSource("venues");
+      // Remove previous artist's pins before adding new ones
+      let markers = document.getElementsByClassName("marker");
+      while (markers.length > 0) {
+        markers[0].remove();
       }
+      // Begin fetching new data and pins
       this.getConcerts(this.props.artistId);
     }
   }
@@ -96,7 +104,8 @@ class Map extends React.Component {
           const concertData = this.filterResults(data);
           this.setState({ concerts: concertData });
           this.setConcerts(concertData);
-          this.addLayer();
+          this.addPoints(this.map);
+          this.setState({ markersOnMap: true });
         });
     }
   };
@@ -109,7 +118,9 @@ class Map extends React.Component {
       const event = events[id];
       const date = new Date(event.start.date);
       const venue = pick(event.venue, ["displayName", "id", "lat", "lng"]);
-      const concertData = { ...venue, date };
+      const city = event.location.city;
+      const url = event.uri;
+      const concertData = { ...venue, date, city, url };
       filteredResults.push(concertData);
     }
     return filteredResults;

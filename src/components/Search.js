@@ -68,8 +68,8 @@ class Search extends React.Component {
           type="text"
           ref="searchinput"
           className="form-control search-input"
-          placeholder="Artist Name"
-          aria-label="Artist Name"
+          placeholder="Artist"
+          aria-label="Artist name"
           aria-describedby="basic-addon1"
           onChange={e => this.setState({ text: e.target.value })}
           onKeyDown={e => this.onKeyDown(e.keyCode)}
