@@ -1,7 +1,7 @@
 import React from "react";
 import mapboxgl from "mapbox-gl";
 import pick from "lodash.pick";
-import { TOKEN, KEY } from "../token";
+import { TOKEN } from "../token";
 import { connect } from "react-redux";
 import "mapbox-gl/dist/mapbox-gl.css";
 mapboxgl.accessToken = TOKEN;
@@ -40,13 +40,13 @@ class Map extends React.Component {
         return {
           type: "Feature",
           properties: {
-            venue: concert.displayName,
-            date: concert.date.toLocaleDateString(),
-            city: concert.city
+            venue: concert.venue.displayName,
+            date: concert.start.date,
+            city: concert.location.city
           },
           geometry: {
             type: "Point",
-            coordinates: [concert.lng, concert.lat]
+            coordinates: [concert.venue.lng, concert.venue.lat]
           }
         };
       })
@@ -96,15 +96,11 @@ class Map extends React.Component {
   // TODO: Get all concerts, not just 50
   getConcerts = artistId => {
     if (artistId !== "") {
-      // https://api.songkick.com/api/3.0/artists/386403/gigography.json?apikey=${KEY}&perPage=20&page=2
-      fetch(
-        `https://api.songkick.com/api/3.0/artists/${artistId}/gigography.json?apikey=${KEY}&page=2`
-      )
+      fetch(`api/concerts?artistId=${artistId}`)
         .then(response => response.json())
-        .then(data => {
-          const concertData = this.filterResults(data);
-          this.setState({ concerts: concertData });
-          this.setConcerts(concertData);
+        .then(concerts => {
+          this.setState({ concerts: concerts });
+          this.setConcerts(concerts);
           this.addPoints(this.map);
           this.setState({ markersOnMap: true });
         });
