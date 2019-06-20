@@ -7,8 +7,8 @@
 .pnp.js
 
 # API keys
-# mapboxToken.*
-# .env
+mapboxToken.*
+.env
 
 # testing
 /coverage
