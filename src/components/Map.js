@@ -96,8 +96,9 @@ class Map extends React.Component {
   // TODO: Get all concerts, not just 50
   getConcerts = artistId => {
     if (artistId !== "") {
+      // https://api.songkick.com/api/3.0/artists/386403/gigography.json?apikey=${KEY}&perPage=20&page=2
       fetch(
-        `https://api.songkick.com/api/3.0/artists/${artistId}/gigography.json?apikey=${KEY}`
+        `https://api.songkick.com/api/3.0/artists/${artistId}/gigography.json?apikey=${KEY}&page=2`
       )
         .then(response => response.json())
         .then(data => {
