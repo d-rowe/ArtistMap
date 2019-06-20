@@ -2,6 +2,8 @@ require("dotenv").config({ path: __dirname + "/.env" });
 const fetch = require("node-fetch");
 const KEY = process.env.SONGKICK_KEY;
 
+// TODO: add number of concert results to response
+
 // To be populated asynchronously as api responses come in
 var apiResults = [];
 

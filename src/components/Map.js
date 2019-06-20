@@ -28,11 +28,9 @@ class Map extends React.Component {
       center: [longitude, latitude],
       zoom
     });
-    this.artistId = this.props.artistId;
-    this.getConcerts(this.artistId);
   }
 
-  addPoints = map => {
+  addMarkers = map => {
     const geojson = {
       id: "venues",
       type: "FeatureCollection",
@@ -82,7 +80,8 @@ class Map extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props !== prevProps) {
+    // Check if artistId prop changed
+    if (this.props.artistId !== prevProps.artistId) {
       // Remove previous artist's pins before adding new ones
       let markers = document.getElementsByClassName("marker");
       while (markers.length > 0) {
@@ -100,13 +99,17 @@ class Map extends React.Component {
         .then(response => response.json())
         .then(concerts => {
           this.setState({ concerts: concerts });
+          // Send concert data to Redux
           this.setConcerts(concerts);
-          this.addPoints(this.map);
+          // Add markers to map
+          this.addMarkers(this.map);
+          // Let state know that we currently have markers on the map
           this.setState({ markersOnMap: true });
         });
     }
   };
 
+  // TODO: Move this to backend before response is sent
   // TODO: if no venue lat/lng, use city lat/lng
   filterResults = results => {
     const events = results.resultsPage.results.event;
