@@ -1,33 +1,54 @@
 require("dotenv").config({ path: __dirname + "/.env" });
 const fetch = require("node-fetch");
-// const pick = require("lodash.pick");
 const KEY = process.env.SONGKICK_KEY;
-var completeConcerts = [];
+
+// To be populated asynchronously as api responses come in
+var apiResults = [];
+
 // Send response of concert array found on the songkick API
 module.exports = getConcerts = (res, artistId) => {
-  completeConcerts = [];
-  fetch(
-    `https://api.songkick.com/api/3.0/artists/${artistId}/gigography.json?apikey=${KEY}&page=1`
-  )
+  // Reset apiResults so they can be repopulated
+  apiResults = [];
+  // Fetch first page to figure out how many pages we will have to retrieve
+  fetch(apiUrl(1, artistId))
     .then(response => response.json())
     .then(data => {
       const numPages = Math.ceil(
         data.resultsPage.totalEntries / data.resultsPage.perPage
       );
-      for (var i = 1; i <= numPages; i++) {
+      // Send over first page to populate apiResults
+      compileResponse(res, numPages, data);
+      // Recursively fetch the remaining pages
+      for (var i = 2; i <= numPages; i++) {
         console.log(i);
+        fetch(apiUrl(1, artistId))
+          .then(response => response.json())
+          .then(data => {
+            compileResponse(res, numPages, data);
+          });
       }
-      reduceSend(res, numPages, data);
     });
 };
 
-// Get first result
-// Find how many pages
-// Recursively fetch and send callback
-
-const reduceSend = (res, numPages, data) => {
-  completeConcerts.push(data.resultsPage.results.event);
-  res.send(completeConcerts);
-  // if (completeConcerts.length === numPages) {
-  // }
+const apiUrl = (pageNum, artistId) => {
+  return `https://api.songkick.com/api/3.0/artists/${artistId}/gigography.json?apikey=${KEY}&page=${pageNum}`;
 };
+
+const compileResponse = (res, numPages, data) => {
+  // Add new item for each page to apiResults
+  apiResults.push(data.resultsPage.results.event);
+  if (apiResults.length === numPages) {
+    res.send(processResponse(apiResults))
+  }
+};
+
+// Spread all concerts in one array
+// TODO: Filter out non-salient properties
+const processResponse = (apiResults) => {
+  var output = [];
+  for (var i = 0; i < apiResults.length; i++) {
+    var currentPage = apiResults[i];
+    output.push(...currentPage);
+  }
+  return output;
+}
