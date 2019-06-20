@@ -4,31 +4,31 @@
 
 ## Setup
 
-### Install dependencies
+### Install Dependencies
 
-Run `./install.sh`. Alternatively, you can run `yarn install` in both `./` and in `/server`.
+Run `./install.sh`. Alternatively, you can run `yarn install` in both `./` and in `/src/server`.
 
-### Getting a Songkick key and Mapbox token
+### Getting a Songkick API key and a Mapbox public token
 
 This project utilizes the [Songkick API](https://www.songkick.com/developer) for artist and concert data and [Mapbox GL](https://docs.mapbox.com/mapbox-gl-js/api/) for visualization.
 
-If you don't have a songkick api key you can apply for one [here](https://www.songkick.com/api_key_requests/new). If you don't have a Mapbox public token you'll can sign up for one by making a Mapbox account [here](https://mapbox.com/signup).
+If you don't have a Songkick API key you can apply for one [here](https://www.songkick.com/api_key_requests/new). If you don't have a Mapbox public token you can get one by making a Mapbox account [here](https://mapbox.com/signup).
 
 ### Storing API Keys
 
-You'll need to supply your mapbox public token. Create a file named `mapboxToken.js` in `./src/client/` and supply your api token as following:
+You'll need to supply your mapbox public token. Create a file named `mapboxToken.js` in `./src/client/`. Your `./src/client/mapboxToken.js` should look as following (with your token supplied):
 
 ```js
 export const TOKEN = // YOUR MAPBOX PUBLIC TOKEN
 ```
 
-You'll need to create a `.env` file in `/server` with your songkick key set to SONGKICK_KEY. `./src/server/.env` should look like the following:
+You'll need to create a `.env` file in `/server` with your songkick key set to SONGKICK_KEY. Your `./src/server/.env` should look like the following:
 
 ```
 SONGKICK_KEY = // YOUR SONGKICK API KEY
 ```
 
-`token.js` and `.env` have been added to the .gitignore, but it's probably worth the check to see if they are being ignored in your environment to keep your precious songkick key safe.
+`mapboxToken.js` and `.env` have been added to the .gitignore, but it's probably worth the check to see if they are being ignored in your environment as to keep your key and token safe.
 
 ## Running
 
@@ -47,5 +47,6 @@ SONGKICK_KEY = // YOUR SONGKICK API KEY
 - [ ] Handle api timeouts
 - [ ] Popup if search found no artist matches
 - [ ] Add spinner while data loads from apis
+- [ ] Add songkick credits
 - [ ] Create production script
 - [ ] Deploy

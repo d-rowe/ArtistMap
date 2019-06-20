@@ -2,6 +2,5 @@
 
 # install client dependencies
 yarn install
-
 # install server dependencies
-cd ./server && yarn install
+cd ./src/server && yarn install
