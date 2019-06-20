@@ -1,6 +1,6 @@
 const fetch = require("node-fetch");
 const pick = require("lodash.pick");
-require("dotenv").config();
+require("dotenv").config({ path: __dirname + "/.env" });
 const KEY = process.env.SONGKICK_KEY;
 
 // Send response of artist name and id found on the songkick API
