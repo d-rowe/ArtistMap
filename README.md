@@ -16,13 +16,13 @@ If you don't have a songkick api key you can apply for one [here](https://www.so
 
 ### Storing API Keys
 
-You'll need to supply your mapbox public token. Create a file named `token.js` in `./src/` and supply your api token as following:
+You'll need to supply your mapbox public token. Create a file named `mapboxToken.js` in `./src/client/` and supply your api token as following:
 
 ```js
 export const TOKEN = // YOUR MAPBOX PUBLIC TOKEN
 ```
 
-You'll need to create a `.env` file in `/server` with your songkick key set to SONGKICK_KEY. `./server/.env` should look like the following:
+You'll need to create a `.env` file in `/server` with your songkick key set to SONGKICK_KEY. `./src/server/.env` should look like the following:
 
 ```
 SONGKICK_KEY = // YOUR SONGKICK API KEY

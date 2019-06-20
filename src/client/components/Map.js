@@ -1,7 +1,7 @@
 import React from "react";
 import mapboxgl from "mapbox-gl";
 import pick from "lodash.pick";
-import { TOKEN } from "../token";
+import { TOKEN } from "../mapboxToken";
 import { connect } from "react-redux";
 import "mapbox-gl/dist/mapbox-gl.css";
 mapboxgl.accessToken = TOKEN;
