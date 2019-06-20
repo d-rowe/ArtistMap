@@ -20,7 +20,6 @@ module.exports = getConcerts = (res, artistId) => {
       compileResponse(res, numPages, data);
       // Recursively fetch the remaining pages
       for (var i = 2; i <= numPages; i++) {
-        console.log(i);
         fetch(apiUrl(1, artistId))
           .then(response => response.json())
           .then(data => {
