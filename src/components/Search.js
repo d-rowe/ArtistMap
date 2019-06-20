@@ -1,9 +1,7 @@
 import React from "react";
-import pick from "lodash.pick";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { connect } from "react-redux";
-import { KEY } from "../token";
 import "./style.scss";
 
 class Search extends React.Component {
@@ -25,33 +23,18 @@ class Search extends React.Component {
     }
   };
 
-  filterResults = results => {
-    const artists = results["resultsPage"]["results"]["artist"];
-    let filteredResults = [];
-    for (let id in artists) {
-      const artist = artists[id];
-      filteredResults.push(pick(artist, ["id", "displayName"]));
-    }
-    return filteredResults;
-  };
-
   getArtists = () => {
     if (this.state.text !== "" && this.state.text.length >= 2) {
-      fetch(
-        `https://api.songkick.com/api/3.0/search/artists.json?apikey=${KEY}&query=${
-          this.state.text
-        }&per_page=1`
-      )
+      fetch(`/api/artist?artistName=${this.state.text}`)
         .then(response => response.json())
         .then(data => {
           try {
-            let artist = this.filterResults(data)[0];
-            if (artist.displayName !== undefined) {
-              this.setArtist(artist.displayName, artist.id);
-              this.refs.searchinput.value = artist.displayName;
+            if ((data.displayName !== undefined) && (data.id )) {
+              this.setArtist(data.displayName, data.id);
+              this.refs.searchinput.value = data.displayName;
             }
           } catch {
-            // TODO: altert if no matches
+            // TODO: alert if no matches
           }
         });
     }
