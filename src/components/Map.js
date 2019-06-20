@@ -11,9 +11,9 @@ class Map extends React.Component {
     super(props);
     this.map = null;
     this.state = {
-      latitude: 42.877742,
-      longitude: -97.380979,
-      zoom: 3,
+      latitude: 36.5,
+      longitude: -95,
+      zoom: 3.5,
       style: "mapbox://styles/danielrowe/cjx57ugrn2nhu1dofkutvayfe",
       concerts: []
     };
