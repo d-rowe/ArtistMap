@@ -14,17 +14,18 @@ class Map extends React.Component {
       latitude: 42.877742,
       longitude: -97.380979,
       zoom: 3,
+      style: "mapbox://styles/danielrowe/cjx57ugrn2nhu1dofkutvayfe",
       concerts: []
     };
     this.setConcerts = this.props.setConcerts;
   }
 
   componentDidMount() {
-    const { longitude, latitude, zoom } = this.state;
+    const { longitude, latitude, zoom, style } = this.state;
 
     this.map = new mapboxgl.Map({
       container: this.mapContainer,
-      style: "mapbox://styles/mapbox/light-v9",
+      style: style,
       center: [longitude, latitude],
       zoom
     });
