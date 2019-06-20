@@ -28,7 +28,7 @@ You'll need to create a `.env` file in `/server` with your songkick key set to S
 SONGKICK_KEY = // YOUR SONGKICK API KEY
 ```
 
-#### MAKE CERTAIN to add `token.js` and `.env` to your `.gitignore` to protect your keys
+`token.js` and `.env` have been added to the .gitignore, but it's probably worth the check to see if they are being ignored in your environment to keep your precious songkick key safe.
 
 ## Running
 
