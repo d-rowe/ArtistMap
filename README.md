@@ -36,10 +36,10 @@ SONGKICK_KEY = // YOUR SONGKICK API KEY
 
 ## TODO
 
-- [x] Fix bug in search causing error fetching (proxy and .env problem)
-- [x] Move songkick api calls over to backend
-- [x] Update README for .env file
-- [x] Add number of concert results to response
+- [x] ~~Fix bug in search causing error fetching (proxy and .env problem)~~
+- [x] ~~Move songkick api calls over to backend~~
+- [x] ~~Update README for .env file~~
+- [x] ~~Add number of concert results to response~~
 - [ ] Filter out concerts with missing data (coordinates, venue name, etc..)
 - [ ] See why concerts api returns even # of concerts (not grabbing last page?, grabbing a page twice?)
 - [ ] Respond with only salient data from the backend (artistId, artistName, venueId, venueName, venueLocation, cityName, cityLocation, date)
