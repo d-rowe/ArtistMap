@@ -4,7 +4,7 @@ Map of artists' tour locations
 
 ## Setup
 
- Run a `yarn install` to install dependencies.
+Run a `yarn install` to install dependencies.
 
 After you have the depencies installed you'll need to supply your own mapbox token and songkick key. To do so create a file named `token.js` in `/src/` and supply your api token as following:
 
@@ -18,3 +18,15 @@ If you don't have a Mapbox token you'll can sign up for one by making a Mapbox a
 Then you can run `yarn start` to get the project up and running.
 
 I know this isn't the best solution, but until I have a node backend handle API calls this will do.
+
+### TODO
+
+- [ ] Fix bug in search causing error fetching
+- [ ] Move all api calls over to backend
+- [ ] Popup if search found no artist matches
+- [ ] Add spinner while data loads from apis
+- [ ] Update README for .env file, move away from token.js
+- [ ] Handle api timeouts
+- [ ] Filter out concerts with missing data (coordinates, venue name, etc..)
+- [ ] Create production script
+- [ ] Deploy
