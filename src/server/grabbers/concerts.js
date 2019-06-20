@@ -1,4 +1,4 @@
-require("dotenv").config({ path: __dirname + "/.env" });
+require("dotenv").config({ path: __dirname + "/../.env" });
 const fetch = require("node-fetch");
 const KEY = process.env.SONGKICK_KEY;
 
