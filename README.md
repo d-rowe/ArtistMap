@@ -1,6 +1,6 @@
 # Interactive Tour Map
 
-### Map of artists' tour locations
+![Screenshot](https://i.imgur.com/5nMuaXe.png)
 
 ## Setup
 
