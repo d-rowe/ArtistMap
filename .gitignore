@@ -2,11 +2,13 @@
 
 # dependencies
 /node_modules
+/server/node_modules
 /.pnp
 .pnp.js
 
 # API keys
 token.*
+.env
 
 # testing
 /coverage
