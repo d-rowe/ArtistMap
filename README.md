@@ -42,6 +42,7 @@ SONGKICK_KEY = // YOUR SONGKICK API KEY
 - [x] ~~Add number of concert results to response~~
 - [ ] Filter out concerts with missing data (coordinates, venue name, etc..)
 - [ ] See why concerts api returns even # of concerts (not grabbing last page?, grabbing a page twice?)
+- [ ] Make markers react components, style markers
 - [ ] Respond with only salient data from the backend (artistId, artistName, venueId, venueName, venueLocation, cityName, cityLocation, date)
 - [ ] Handle api timeouts
 - [ ] Popup if search found no artist matches
