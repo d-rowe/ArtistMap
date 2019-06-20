@@ -1,0 +1,1 @@
+export const TOKEN = // YOUR MAPBOX PUBLIC TOKEN

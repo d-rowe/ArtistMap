@@ -6,7 +6,7 @@
 
 ### Install Dependencies
 
-Run `./install.sh`. Alternatively, you can run `yarn install` in both `./` and in `/src/server`.
+Run `./install.sh`. Alternatively, you can run `yarn install` in both the root and in `/src/server`.
 
 ### Getting a Songkick API key and a Mapbox public token
 
@@ -16,16 +16,20 @@ If you don't have a Songkick API key you can apply for one [here](https://www.so
 
 ### Storing API Keys
 
-You'll need to supply your mapbox public token. Create a file named `mapboxToken.js` in `./src/client/`. Your `./src/client/mapboxToken.js` should look as following (with your token supplied):
+You'll need to supply your own Songkick key and mapbox public token.
+
+#### Mapbox
+Add your public token to `/src/client/mapboxToken.js`. It should look like the following:
 
 ```js
 export const TOKEN = // YOUR MAPBOX PUBLIC TOKEN
 ```
 
-You'll need to create a `.env` file in `/server` with your songkick key set to SONGKICK_KEY. Your `./src/server/.env` should look like the following:
+#### Songkick
+Add your Songkick key to `/src/server/.env`. It should look like the following:
 
-```
-SONGKICK_KEY = // YOUR SONGKICK API KEY
+```bash
+SONGKICK_KEY = # YOUR SONGKICK API KEY
 ```
 
 `mapboxToken.js` and `.env` have been added to the .gitignore, but it's probably worth the check to see if they are being ignored in your environment as to keep your key and token safe.
