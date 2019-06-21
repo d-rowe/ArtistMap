@@ -55,7 +55,7 @@ class Map extends React.Component {
 
     geojson.features.forEach(function(marker) {
       // create a HTML element for each feature
-      var el = document.createElement("div");
+      let el = document.createElement("div");
       el.className = "marker";
       // make a marker for each feature and add to the map
       new mapboxgl.Marker(el)
