@@ -39,9 +39,11 @@ class Map extends React.Component {
         return {
           type: "Feature",
           properties: {
+            name: concert.displayName,
             venue: concert.venue.displayName,
             date: concert.start.date,
-            city: concert.location.city
+            city: concert.location.city,
+            url: concert.uri
           },
           geometry: {
             type: "Point",
@@ -61,15 +63,12 @@ class Map extends React.Component {
         .setPopup(
           new mapboxgl.Popup({ offset: 25 }) // add popups
             .setHTML(
-              `<p>
-              ${marker.properties.date}
-              </p>
-              <p> 
-              ${marker.properties.venue}
-              </p>
-              <p> 
-              ${marker.properties.city}
-              </p>`
+              `<div class="card-body">
+                <p>${marker.properties.name}</p>
+                <a href="${
+                  marker.properties.url
+                }" class="card-link">Event on Songkick</a>
+              </div>`
             )
         )
         .addTo(map);
