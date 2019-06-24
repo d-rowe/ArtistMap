@@ -1,8 +1,16 @@
-# Interactive Tour Map
+# Artist Tour
 
-![Screenshot](https://i.imgur.com/5nMuaXe.png)
+![Screenshot](https://i.imgur.com/HivKefy.png)
 
-## Setup
+---
+- [Getting Started](#getting-started)
+
+- [Running](#running)
+
+- [Contributing](#contributing)
+---
+
+## Getting Started
 
 ### Install Dependencies
 
@@ -19,6 +27,7 @@ If you don't have a Songkick API key you can apply for one [here](https://www.so
 You'll need to supply your own Songkick key and mapbox public token.
 
 #### Mapbox
+
 Add your public token to `/src/client/mapboxToken.js`. It should look like the following:
 
 ```js
@@ -26,6 +35,7 @@ export const TOKEN = // YOUR MAPBOX PUBLIC TOKEN
 ```
 
 #### Songkick
+
 Add your Songkick key to `/src/server/.env`. It should look like the following:
 
 ```bash
@@ -34,22 +44,31 @@ SONGKICK_KEY = # YOUR SONGKICK API KEY
 
 `mapboxToken.js` and `.env` have been added to the .gitignore, but it's probably worth the check to see if they are being ignored in your environment as to keep your key and token safe.
 
+---
+
 ## Running
 
 `yarn start` will start both the react app and express API server. Alternatively, you can run the react app with `yarn client` and the express API server with `yarn server`.
 
-## TODO
+---
+
+## Contributing
+
+If you'd like contribute feel free to create a pull request.
+
+### TODO
 
 - [x] ~~Fix bug in search causing error fetching (proxy and .env problem)~~
 - [x] ~~Move songkick api calls over to backend~~
 - [x] ~~Update README for .env file~~
 - [x] ~~Add number of concert results to response~~
-- [ ] Filter out concerts with missing data (coordinates, venue name, etc..)
-- [ ] See why concerts api returns even # of concerts (not grabbing last page?, grabbing a page twice?)
-- [ ] Add Songkick attribution
-- [ ] Add attribution and link to professional site
-- [ ] Make markers react components, style markers
-- [ ] Respond with only salient data from the backend (artistId, artistName, venueId, venueName, venueLocation, cityName, cityLocation, date)
+- [ ] Migrate from markers to a [cluster layer](https://docs.mapbox.com/mapbox-gl-js/example/cluster/)
+- [ ] Filter out concerts with missing data (coordinates, concert title, etc..)
+
+### Future
+
+- [ ] Loading animation ([react-loading-overlay](https://github.com/derrickpelletier/react-loading-overlay#readme))
+- [ ] Filter server data to only include salient properties (artistId, artistName, venueId, venueName, venueLocation, cityName, cityLocation, date)
 - [ ] Handle api timeouts
 - [ ] Popup if search found no artist matches
 - [ ] Add spinner while data loads from apis
