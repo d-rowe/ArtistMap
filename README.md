@@ -1,6 +1,6 @@
 # Artist Tour
 
-![Screenshot](https://i.imgur.com/HivKefy.png)
+![Screenshot](https://i.imgur.com/LP3F9mI.png)
 
 ---
 - [Getting Started](#getting-started)
