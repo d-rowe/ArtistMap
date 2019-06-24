@@ -56,7 +56,7 @@ SONGKICK_KEY = # YOUR SONGKICK API KEY
 
 If you'd like contribute feel free to create a pull request.
 
-### High Priority
+### Higher Priority
 
 - [x] ~~Fix bug in search causing error fetching (proxy and .env problem)~~
 - [x] ~~Move songkick api calls over to backend~~
@@ -65,6 +65,7 @@ If you'd like contribute feel free to create a pull request.
 - [x] ~~Migrate from markers to a [cluster layer](https://docs.mapbox.com/mapbox-gl-js/example/cluster/)~~
 - [ ] Map.js: Move getConcerts() and filterResults() to MapTools.js and migrate concert data from state to Redux to facilitate this
 - [ ] Filter out concerts with missing data (coordinates, concert title, etc..)
+- [ ] Update cluster style expressions to better fit data
 - [ ] Add Popup on individual venue points
 
 ### Lower Priority
