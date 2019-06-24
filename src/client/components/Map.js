@@ -1,10 +1,13 @@
 import React from "react";
 import mapboxgl from "mapbox-gl";
 import pick from "lodash.pick";
+import { addClusters } from "./MapTools";
 import { TOKEN } from "../mapboxToken";
 import { connect } from "react-redux";
 import "mapbox-gl/dist/mapbox-gl.css";
 mapboxgl.accessToken = TOKEN;
+
+// TODO: Move getConcerts() and filterResults() to MapTools.js and migrate concert data from state to Redux
 
 class Map extends React.Component {
   constructor(props) {
@@ -14,7 +17,7 @@ class Map extends React.Component {
       latitude: 36.5,
       longitude: -95,
       zoom: 3.5,
-      style: "mapbox://styles/danielrowe/cjx57ugrn2nhu1dofkutvayfe",
+      style: "mapbox://styles/mapbox/dark-v10",
       concerts: []
     };
     this.setConcerts = this.props.setConcerts;
@@ -22,7 +25,6 @@ class Map extends React.Component {
 
   componentDidMount() {
     const { longitude, latitude, zoom, style } = this.state;
-
     this.map = new mapboxgl.Map({
       container: this.mapContainer,
       style: style,
@@ -31,50 +33,6 @@ class Map extends React.Component {
     });
   }
 
-  addMarkers = map => {
-    const geojson = {
-      id: "venues",
-      type: "FeatureCollection",
-      features: this.state.concerts.map(concert => {
-        return {
-          type: "Feature",
-          properties: {
-            name: concert.displayName,
-            venue: concert.venue.displayName,
-            date: concert.start.date,
-            city: concert.location.city,
-            url: concert.uri
-          },
-          geometry: {
-            type: "Point",
-            coordinates: [concert.venue.lng, concert.venue.lat]
-          }
-        };
-      })
-    };
-
-    geojson.features.forEach(function(marker) {
-      // create a HTML element for each feature
-      let el = document.createElement("div");
-      el.className = "marker";
-      // make a marker for each feature and add to the map
-      new mapboxgl.Marker(el)
-        .setLngLat(marker.geometry.coordinates)
-        .setPopup(
-          new mapboxgl.Popup({ offset: 25 }) // add popups
-            .setHTML(
-              `<div class="card-body">
-                <p>${marker.properties.name}</p>
-                <a href="${
-                  marker.properties.url
-                }" class="card-link">Event on Songkick</a>
-              </div>`
-            )
-        )
-        .addTo(map);
-    });
-  };
-
   componentWillUnmount() {
     this.map.remove();
   }
@@ -82,17 +40,11 @@ class Map extends React.Component {
   componentDidUpdate(prevProps) {
     // Check if artistId prop changed
     if (this.props.artistId !== prevProps.artistId) {
-      // Remove previous artist's pins before adding new ones
-      let markers = document.getElementsByClassName("marker");
-      while (markers.length > 0) {
-        markers[0].remove();
-      }
-      // Begin fetching new data and pins
+      // Begin fetching source and add layers
       this.getConcerts(this.props.artistId);
     }
   }
 
-  // TODO: Get all concerts, not just 50
   getConcerts = artistId => {
     if (artistId !== "") {
       fetch(`api/concerts?artistId=${artistId}`)
@@ -101,10 +53,8 @@ class Map extends React.Component {
           this.setState({ concerts: concerts });
           // Send concert data to Redux
           this.setConcerts(concerts);
-          // Add markers to map
-          this.addMarkers(this.map);
-          // Let state know that we currently have markers on the map
-          this.setState({ markersOnMap: true });
+          // Add clusters to map
+          addClusters(this.map, this.state.concerts);
         });
     }
   };
