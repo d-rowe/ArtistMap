@@ -64,16 +64,17 @@ If you'd like contribute feel free to create a pull request.
 - [x] ~~Add number of concert results to response~~
 - [x] ~~Migrate from markers to a [cluster layer](https://docs.mapbox.com/mapbox-gl-js/example/cluster/)~~
 - [x] ~~Update cluster style expressions to better fit data~~
-- [ ] Loading animation and redux concert loading state ([react-loading-overlay](https://github.com/derrickpelletier/react-loading-overlay#readme))
-- [ ] Fallback to city coordinates if no venue coordinate data (or just filter these results out)
+- [x] ~~Fallback to city coordinates if no venue coordinate data~~
+- [x] ~~Concert API to return geojson data instead of concert array~~
+- [ ] Deployment for demo
+- [ ] Loading animation
 
 ### Lower Priority
 
+- [x] ~~Filter server data to only include salient properties (artistId, artistName, venueId, venueName, venueLocation, cityName, cityLocation, date)~~
+- [ ] Search suggestions
 - [ ] Add Popup on individual venue points
-- [ ] Filter server data to only include salient properties (artistId, artistName, venueId, venueName, venueLocation, cityName, cityLocation, date)
 - [ ] Handle api timeouts (migrate from fetch to axios)
 - [ ] Popup if search found no artist matches
-- [ ] Add spinner in search while data loads from api
 - [ ] Add songkick credits
 - [ ] Create production script
-- [ ] Deploy

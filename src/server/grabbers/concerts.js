@@ -39,17 +39,61 @@ const compileResponse = (res, numPages, data) => {
   // Add new item for each page to pageResults
   pageResults.push(data.resultsPage.results.event);
   if (pageResults.length === numPages) {
-    res.send(processResponse(pageResults))
+    processAndSend(pageResults, res);
   }
 };
 
-// TODO: Filter out non-salient properties
+const processAndSend = (pageResults, res) => {
+  const concerts = combinePages(pageResults);
+  const geojson = getGeoJSON(fixCoords(concerts));
+  res.send(geojson);
+};
+
+// TODO: Return geojson
 // Spread all concerts in one array
-const processResponse = (pageResults) => {
+const combinePages = pageResults => {
   let output = [];
   for (let i = 0; i < pageResults.length; i++) {
     let currentPage = pageResults[i];
     output.push(...currentPage);
   }
+  return fixCoords(output);
+};
+
+const fixCoords = concerts => {
+  let output = [];
+  concerts.forEach(concert => {
+    if (typeof concert.venue.lat === "number") {
+      concert.lat = concert.venue.lat;
+      concert.lng = concert.venue.lng;
+    } else {
+      concert.lat = concert.location.lat;
+      concert.lng = concert.location.lng;
+    }
+    output.push(concert);
+  });
   return output;
-}
+};
+
+const getGeoJSON = concerts => {
+  return {
+    id: "venues",
+    type: "FeatureCollection",
+    features: concerts.map(concert => {
+      return {
+        type: "Feature",
+        properties: {
+          name: concert.displayName,
+          venue: concert.venue.displayName,
+          date: concert.start.date,
+          city: concert.location.city,
+          url: concert.uri
+        },
+        geometry: {
+          type: "Point",
+          coordinates: [concert.lng, concert.lat]
+        }
+      };
+    })
+  };
+};

@@ -16,7 +16,7 @@ class Map extends React.Component {
       style: "mapbox://styles/mapbox/dark-v10",
       concerts: []
     };
-    this.setConcerts = this.props.setConcerts;
+    this.setGeoJSON = this.props.setGeoJSON;
   }
 
   componentDidMount() {
@@ -39,18 +39,18 @@ class Map extends React.Component {
     // Check if artistId prop changed
     if (this.props.artistId !== prevProps.artistId) {
       // Begin fetching source and add layers
-      this.getConcerts(this.props.artistId);
+      this.getGeoJOSN(this.props.artistId);
     }
   }
 
-  getConcerts = artistId => {
+  getGeoJOSN = artistId => {
     if (artistId !== "") {
       fetch(`api/concerts?artistId=${artistId}`)
         .then(response => response.json())
-        .then(concerts => {
-          this.setState({ concerts: concerts });
+        .then(geoJSON => {
+          this.setState({ geoJSON: geoJSON });
           // Send concert data to Redux
-          this.setConcerts(concerts);
+          this.setGeoJSON(geoJSON);
           // Add clusters to map
           this.addClusters();
         });
@@ -59,35 +59,12 @@ class Map extends React.Component {
 
   addClusters = () => {
     const map = this.map;
-    const concertsArray = this.state.concerts;
-    // Create geojson from concertsArray
-    const geojson = {
-      id: "venues",
-      type: "FeatureCollection",
-      features: concertsArray.map(concert => {
-        return {
-          type: "Feature",
-          properties: {
-            name: concert.displayName,
-            venue: concert.venue.displayName,
-            date: concert.start.date,
-            city: concert.location.city,
-            url: concert.uri
-          },
-          geometry: {
-            type: "Point",
-            coordinates: [concert.venue.lng, concert.venue.lat]
-          }
-        };
-      })
-    };
-
     // Remove layers and source before adding new ones
     this.removeClusters();
 
     map.addSource("concerts", {
       type: "geojson",
-      data: geojson,
+      data: this.state.geoJSON,
       cluster: true,
       clusterMaxZoom: 14, // Max zoom to cluster points on
       clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
@@ -210,7 +187,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    setConcerts: concertArray => {
+    setGeoJSON: concertArray => {
       dispatch({ type: "SET_CONCERTS", concerts: concertArray });
     }
   };
