@@ -1,13 +1,10 @@
 # Artist Tour
 
-Explore band gigographies. Created with Mapbox, React, Redux, Songkick API, and node.js
+Explore band gigographies. Created with Mapbox, React, Redux, Songkick API, and Express.
 
 Demo @ [https://artistmap.herokuapp.com](https://artistmap.herokuapp.com).
 
 ![Screenshot](https://i.imgur.com/jjsSxn1.png)
-
-
-
 
 - [Getting Started](#getting-started)
 
