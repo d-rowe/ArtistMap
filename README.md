@@ -1,8 +1,14 @@
 # Artist Tour
 
-![Screenshot](https://i.imgur.com/LP3F9mI.png)
+Explore band gigographies. Created with Mapbox, React, Redux, Songkick API, and node.js
 
----
+Demo @ [https://artistmap.herokuapp.com](https://artistmap.herokuapp.com).
+
+![Screenshot](https://i.imgur.com/jjsSxn1.png)
+
+
+
+
 - [Getting Started](#getting-started)
 
 - [Running](#running)
@@ -66,7 +72,7 @@ If you'd like contribute feel free to create a pull request.
 - [x] ~~Update cluster style expressions to better fit data~~
 - [x] ~~Fallback to city coordinates if no venue coordinate data~~
 - [x] ~~Concert API to return geojson data instead of concert array~~
-- [ ] Deployment for demo
+- [x] ~~Deployment for demo~~
 - [ ] Loading animation
 
 ### Lower Priority
