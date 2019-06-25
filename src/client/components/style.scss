@@ -13,18 +13,3 @@
   height: 100%;
   width: 100%;
 }
-
-.marker {
-  background-image: url("../map-marker.svg");
-  fill: "blue";
-  background-size: contain;
-  background-repeat: no-repeat;
-  width: 25px;
-  height: 25px;
-  cursor: pointer;
-}
-
-.mapboxgl-popup-content {
-  text-align: center;
-  font-family: "Open Sans", sans-serif;
-}

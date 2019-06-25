@@ -63,18 +63,17 @@ If you'd like contribute feel free to create a pull request.
 - [x] ~~Update README for .env file~~
 - [x] ~~Add number of concert results to response~~
 - [x] ~~Migrate from markers to a [cluster layer](https://docs.mapbox.com/mapbox-gl-js/example/cluster/)~~
-- [ ] Map.js: Move getConcerts() and filterResults() to MapTools.js and migrate concert data from state to Redux to facilitate this
-- [ ] Filter out concerts with missing data (coordinates, concert title, etc..)
-- [ ] Update cluster style expressions to better fit data
-- [ ] Add Popup on individual venue points
+- [x] ~~Update cluster style expressions to better fit data~~
+- [ ] Loading animation and redux concert loading state ([react-loading-overlay](https://github.com/derrickpelletier/react-loading-overlay#readme))
+- [ ] Fallback to city coordinates if no venue coordinate data (or just filter these results out)
 
 ### Lower Priority
 
-- [ ] Loading animation ([react-loading-overlay](https://github.com/derrickpelletier/react-loading-overlay#readme))
+- [ ] Add Popup on individual venue points
 - [ ] Filter server data to only include salient properties (artistId, artistName, venueId, venueName, venueLocation, cityName, cityLocation, date)
-- [ ] Handle api timeouts
+- [ ] Handle api timeouts (migrate from fetch to axios)
 - [ ] Popup if search found no artist matches
-- [ ] Add spinner while data loads from apis
+- [ ] Add spinner in search while data loads from api
 - [ ] Add songkick credits
 - [ ] Create production script
 - [ ] Deploy

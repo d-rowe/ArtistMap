@@ -1,13 +1,9 @@
 import React from "react";
 import mapboxgl from "mapbox-gl";
-import pick from "lodash.pick";
-import { addClusters } from "./MapTools";
 import { TOKEN } from "../mapboxToken";
 import { connect } from "react-redux";
 import "mapbox-gl/dist/mapbox-gl.css";
 mapboxgl.accessToken = TOKEN;
-
-// TODO: Move getConcerts() and filterResults() to MapTools.js and migrate concert data from state to Redux
 
 class Map extends React.Component {
   constructor(props) {
@@ -31,6 +27,8 @@ class Map extends React.Component {
       center: [longitude, latitude],
       zoom
     });
+
+    this.setMouseEvents();
   }
 
   componentWillUnmount() {
@@ -54,26 +52,149 @@ class Map extends React.Component {
           // Send concert data to Redux
           this.setConcerts(concerts);
           // Add clusters to map
-          addClusters(this.map, this.state.concerts);
+          this.addClusters();
         });
     }
   };
 
-  // TODO: Move this to backend before response is sent
-  // TODO: if no venue lat/lng, use city lat/lng
-  filterResults = results => {
-    const events = results.resultsPage.results.event;
-    let filteredResults = [];
-    for (let id in events) {
-      const event = events[id];
-      const date = new Date(event.start.date);
-      const venue = pick(event.venue, ["displayName", "id", "lat", "lng"]);
-      const city = event.location.city;
-      const url = event.uri;
-      const concertData = { ...venue, date, city, url };
-      filteredResults.push(concertData);
+  addClusters = () => {
+    const map = this.map;
+    const concertsArray = this.state.concerts;
+    // Create geojson from concertsArray
+    const geojson = {
+      id: "venues",
+      type: "FeatureCollection",
+      features: concertsArray.map(concert => {
+        return {
+          type: "Feature",
+          properties: {
+            name: concert.displayName,
+            venue: concert.venue.displayName,
+            date: concert.start.date,
+            city: concert.location.city,
+            url: concert.uri
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [concert.venue.lng, concert.venue.lat]
+          }
+        };
+      })
+    };
+
+    // Remove layers and source before adding new ones
+    this.removeClusters();
+
+    map.addSource("concerts", {
+      type: "geojson",
+      data: geojson,
+      cluster: true,
+      clusterMaxZoom: 14, // Max zoom to cluster points on
+      clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
+    });
+
+    map.addLayer({
+      id: "clusters",
+      type: "circle",
+      source: "concerts",
+      filter: ["has", "point_count"],
+      paint: {
+        "circle-color": [
+          "step",
+          ["get", "point_count"],
+          "#62a1db", // Blue circle when less than 10 concerts
+          10,
+          "#e7d87d", // Yellow circle when between 10 and 25 concerts
+          25,
+          "#dd9f40", // Orange circle when between 25 and 50 concerts
+          50,
+          "#b4451f", // Orangered circle when between 50 and 100 concerts
+          100,
+          "#b01111" // Red circle when more than 100 concerts
+        ],
+        "circle-radius": [
+          "step",
+          ["get", "point_count"],
+          15, // 15px circle when less than 10 concerts
+          10,
+          20, // 20px circle when between 10 and 25 concerts
+          25,
+          25, // 25px circle when between 25 and 50 concerts
+          50,
+          30, // 30px circle when between 50 and 100 concerts
+          100,
+          40 // 40px circle when more than 100 concerts
+        ]
+      }
+    });
+
+    map.addLayer({
+      id: "cluster-count",
+      type: "symbol",
+      source: "concerts",
+      filter: ["has", "point_count"],
+      layout: {
+        "text-field": "{point_count_abbreviated}",
+        "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
+        "text-size": 12
+      }
+    });
+
+    map.addLayer({
+      id: "unclustered-point",
+      type: "circle",
+      source: "concerts",
+      filter: ["!", ["has", "point_count"]],
+      paint: {
+        "circle-color": "#11b4da",
+        "circle-radius": 4,
+        "circle-stroke-width": 1,
+        "circle-stroke-color": "#fff"
+      }
+    });
+  };
+
+  removeClusters = () => {
+    const map = this.map;
+    
+    const layers = ["clusters", "cluster-count", "unclustered-point"];
+    layers.forEach(layer => {
+      if (map.getLayer(layer)) {
+        map.removeLayer(layer);
+      }
+    });
+    
+    if (map.getSource("concerts")) {
+      map.removeSource("concerts");
     }
-    return filteredResults;
+  };
+
+  setMouseEvents = () => {
+    const map = this.map;
+    // inspect a cluster on click
+    map.on("click", "clusters", function(e) {
+      var features = map.queryRenderedFeatures(e.point, {
+        layers: ["clusters"]
+      });
+      var clusterId = features[0].properties.cluster_id;
+      map
+        .getSource("concerts")
+        .getClusterExpansionZoom(clusterId, function(err, zoom) {
+          if (err) return;
+
+          map.easeTo({
+            center: features[0].geometry.coordinates,
+            zoom: zoom
+          });
+        });
+    });
+
+    map.on("mouseenter", "clusters", function() {
+      map.getCanvas().style.cursor = "pointer";
+    });
+    map.on("mouseleave", "clusters", function() {
+      map.getCanvas().style.cursor = "";
+    });
   };
 
   render() {
