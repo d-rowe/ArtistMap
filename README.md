@@ -48,7 +48,7 @@ SONGKICK_KEY = # YOUR SONGKICK API KEY
 
 ## Running
 
-`yarn start` will start both the react app and express API server. Alternatively, you can run the react app with `yarn client` and the express API server with `yarn server`.
+`yarn dev` will start both the react app and express API server. Alternatively, you can run the react app with `yarn client` and the express API server with `yarn server`.
 
 ---
 

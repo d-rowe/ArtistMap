@@ -49,7 +49,6 @@ const processAndSend = (pageResults, res) => {
   res.send(geojson);
 };
 
-// TODO: Return geojson
 // Spread all concerts in one array
 const combinePages = pageResults => {
   let output = [];
@@ -60,6 +59,7 @@ const combinePages = pageResults => {
   return fixCoords(output);
 };
 
+// Fallback to city coordinates if there's no venue coordinate data
 const fixCoords = concerts => {
   let output = [];
   concerts.forEach(concert => {
@@ -75,6 +75,7 @@ const fixCoords = concerts => {
   return output;
 };
 
+// Create geoJSON object from concert array
 const getGeoJSON = concerts => {
   return {
     id: "venues",
