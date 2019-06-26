@@ -31,10 +31,10 @@ You'll need to supply your own Songkick key and mapbox public token.
 
 #### Mapbox
 
-Add your public token to `/src/client/mapboxToken.js`. It should look like the following:
+Add your public token to `/src/client/config.js`. It should look like the following:
 
 ```js
-export const TOKEN = // YOUR MAPBOX PUBLIC TOKEN
+export const MAPBOX_TOKEN = // YOUR MAPBOX PUBLIC TOKEN
 ```
 
 #### Songkick
@@ -45,7 +45,7 @@ Add your Songkick key to `/src/server/.env`. It should look like the following:
 SONGKICK_KEY = # YOUR SONGKICK API KEY
 ```
 
-`mapboxToken.js` and `.env` have been added to the .gitignore, but it's probably worth the check to see if they are being ignored in your environment as to keep your key and token safe.
+`config.js` and `.env` have been added to the .gitignore, but it's probably worth the check to see if they are being ignored in your environment as to keep your key and token safe.
 
 ---
 
@@ -71,13 +71,13 @@ If you'd like contribute feel free to create a pull request.
 - [x] ~~Concert API to return geojson data instead of concert array~~
 - [x] ~~Deployment for demo~~
 - [ ] Loading animation
+- [ ] Search suggestions
+- [ ] Popup if search found no artist matches
+- [ ] Handle api timeouts (migrate from fetch to axios)
 
 ### Lower Priority
 
 - [x] ~~Filter server data to only include salient properties (artistId, artistName, venueId, venueName, venueLocation, cityName, cityLocation, date)~~
-- [ ] Search suggestions
 - [ ] Add Popup on individual venue points
-- [ ] Handle api timeouts (migrate from fetch to axios)
-- [ ] Popup if search found no artist matches
 - [ ] Add songkick credits
 - [ ] Create production script

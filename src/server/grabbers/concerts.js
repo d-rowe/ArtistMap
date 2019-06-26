@@ -59,18 +59,19 @@ const combinePages = pageResults => {
   return fixCoords(output);
 };
 
-// Fallback to city coordinates if there's no venue coordinate data
+// Fallback to city coordinates if there's no venue coordinate data, don't add concerts w/o any coordinate data
 const fixCoords = concerts => {
   let output = [];
   concerts.forEach(concert => {
     if (typeof concert.venue.lat === "number") {
       concert.lat = concert.venue.lat;
       concert.lng = concert.venue.lng;
-    } else {
+      output.push(concert);
+    } else if (typeof concert.venue.lat === "number") {
       concert.lat = concert.location.lat;
       concert.lng = concert.location.lng;
+      output.push(concert);
     }
-    output.push(concert);
   });
   return output;
 };
