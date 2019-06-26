@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
-const getArtist = require("./grabbers/artist");
-const getConcerts = require("./grabbers/concerts");
+const getArtist = require("./api/artist");
+const getConcerts = require("./api/concerts");
 require("dotenv").config();
 
 app.get("/api/artist", (req, res) => {
