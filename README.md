@@ -11,6 +11,7 @@ Demo @ [https://artistmap.herokuapp.com](https://artistmap.herokuapp.com).
 - [Running](#running)
 
 - [Contributing](#contributing)
+
 ---
 
 ## Getting Started
@@ -70,8 +71,9 @@ If you'd like contribute feel free to create a pull request.
 - [x] ~~Fallback to city coordinates if no venue coordinate data~~
 - [x] ~~Concert API to return geojson data instead of concert array~~
 - [x] ~~Deployment for demo~~
+- [x] ~~Search suggestions~~
+- [ ] Grab more search suggestions (25?), only send the most popular 5 back to client
 - [ ] Loading animation
-- [ ] Search suggestions
 - [ ] Popup if search found no artist matches
 - [ ] Handle api timeouts (migrate from fetch to axios)
 

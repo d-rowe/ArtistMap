@@ -3,6 +3,7 @@ const initState = {
     displayName: "",
     id: ""
   },
+  suggestions: [],
   concerts: []
 };
 
@@ -11,6 +12,13 @@ const rootReducer = (state = initState, action) => {
     return {
       ...state,
       artist: { displayName: action.name, id: action.id }
+    };
+  }
+
+  if (action.type === "SET_SUGGESTIONS") {
+    return {
+      ...state,
+      suggestions: action.suggestions
     };
   }
 

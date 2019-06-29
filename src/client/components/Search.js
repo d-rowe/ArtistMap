@@ -1,76 +1,124 @@
 import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { connect } from "react-redux";
 import "./style.scss";
+import Suggestions from "./Suggestions";
 
 class Search extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      text: ""
-    };
+    this.text = "";
+    this.canCall = true;
+    this.apiRateLimit = 750; // in ms
     this.setArtist = this.props.setArtist;
+    this.setSuggestions = this.props.setSuggestions;
+    this.lastSearch = "";
   }
 
   onEnter = () => {
-    this.getArtists();
+    const artist = this.props.suggestions[0];
+    this.setArtist(artist.name, artist.id);
+    this.setSuggestions([]);
   };
 
-  onKeyDown = keyVal => {
+  onFocus = e => {
+    this.onChange(e);
+  };
+
+  onBlur = () => {
+    // Wait for artist to be set and then clear suggestions
+    setTimeout(() => {
+      this.setSuggestions([]);
+    }, 100);
+  };
+
+  onChange = e => {
+    const text = e.target.value;
+    this.text = text;
+
+    if (this.canCall && text.length > 2) {
+      this.getSuggestions();
+      this.canCall = false;
+      setTimeout(() => {
+        this.canCall = true;
+        if (this.text !== this.lastSearch) {
+          this.getSuggestions();
+        }
+      }, this.apiRateLimit);
+    }
+  };
+
+  onKeyDown = e => {
+    // Set artist with enter key
+    const keyVal = e.keyCode;
     if (keyVal === 13) {
       this.onEnter();
     }
+    // Clear suggestions with esc key
+    if (keyVal === 27) {
+      this.setSuggestions([]);
+    }
   };
 
-  getArtists = () => {
-    if (this.state.text !== "" && this.state.text.length >= 2) {
-      fetch(`/api/artist?artistName=${this.state.text}`)
+  getSuggestions = () => {
+    this.lastSearch = this.text;
+    if (this.text !== "" && this.text.length >= 2) {
+      fetch(`/api/artist?artistName=${this.text}`)
         .then(response => response.json())
         .then(data => {
-          try {
-            if ((data.displayName !== undefined) && (data.id )) {
-              this.setArtist(data.displayName, data.id);
-              this.refs.searchinput.value = data.displayName;
-            }
-          } catch {
-            // TODO: alert if no matches
-          }
+          this.setSuggestions(data);
         });
     }
   };
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.artist !== this.props.artist) {
+      console.log(this.props);
+      this.refs.searchinput.value = this.props.artist.displayName;
+    }
+  }
+
   render() {
     return (
-      <div className="input-group input-group-lg search shadow">
-        <div className="input-group-prepend">
-          <span className="input-group-text" id="basic-addon1">
-            <FontAwesomeIcon icon={faSearch} />
-          </span>
+      <div className="search">
+        <div className="input-group input-group-lg shadow">
+          <input
+            type="text"
+            ref="searchinput"
+            className="form-control search-input"
+            placeholder="Artist"
+            aria-label="Artist name"
+            aria-describedby="basic-addon1"
+            onChange={this.onChange}
+            onBlur={this.onBlur}
+            onFocus={this.onFocus}
+            onKeyDown={this.onKeyDown}
+          />
         </div>
-        <input
-          type="text"
-          ref="searchinput"
-          className="form-control search-input"
-          placeholder="Artist"
-          aria-label="Artist name"
-          aria-describedby="basic-addon1"
-          onChange={e => this.setState({ text: e.target.value })}
-          onKeyDown={e => this.onKeyDown(e.keyCode)}
-        />
+        <Suggestions />
       </div>
     );
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    artist: state.artist,
+    suggestions: state.suggestions
+  };
+};
+
 const mapDispatchToProps = dispatch => {
   return {
     setArtist: (name, id) => {
       dispatch({ type: "SET_ARTIST", name: name, id: id });
+    },
+    setSuggestions: suggestions => {
+      dispatch({ type: "SET_SUGGESTIONS", suggestions: suggestions });
     }
   };
 };
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(Search);
