@@ -72,7 +72,6 @@ class Search extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.artist !== this.props.artist) {
-      console.log(this.props);
       this.refs.searchinput.value = this.props.artist.displayName;
     }
   }

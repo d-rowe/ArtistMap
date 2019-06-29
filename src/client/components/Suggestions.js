@@ -1,26 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 
 const Suggestions = ({ setArtist, suggestions, setSuggestions }) => {
-  const onClick = e => {
-    const [name, id] = [e.target.textContent, e.target.id];
-    setArtist(name, id);
-    setSuggestions([]);
-  };
-
   if (suggestions.length > 0) {
     return (
       <div className="suggestions">
         <ul className="list-group">
           {suggestions.map(suggestion => (
-            <li
-              className="list-group-item suggestion"
+            <Suggestion
+              name={suggestion.name}
               id={suggestion.id}
-              key={suggestion.id}
-              onClick={onClick}
-            >
-              {suggestion.name}
-            </li>
+              setArtist={setArtist}
+              setSuggestions={setSuggestions}
+            />
           ))}
         </ul>
       </div>
@@ -28,6 +20,36 @@ const Suggestions = ({ setArtist, suggestions, setSuggestions }) => {
   } else {
     return null;
   }
+};
+
+const Suggestion = ({ name, id, setArtist, setSuggestions }) => {
+  const [active, setActive] = useState(false);
+
+  const onClick = e => {
+    setArtist(name, id);
+    setSuggestions([]);
+  };
+
+  const onHover = () => {
+    setActive(true);
+  };
+
+  const onLeave = () => {
+    setActive(false);
+  };
+
+  return (
+    <li
+      className={"list-group-item suggestion " + (active ? " active" : "")}
+      id={id}
+      key={id}
+      onClick={onClick}
+      onMouseOver={onHover}
+      onMouseLeave={onLeave}
+    >
+      {name}
+    </li>
+  );
 };
 
 const mapStateToProps = state => {

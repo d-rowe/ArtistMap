@@ -19,11 +19,8 @@
   -moz-user-select: none; /* Firefox */
   -ms-user-select: none; /* IE10+/Edge */
   user-select: none; /* Standard */
-  opacity: 0.85;
 }
 
 .suggestion:hover {
-  background-color: rgb(14, 110, 255);
-  color: white;
   cursor: pointer;
 }
