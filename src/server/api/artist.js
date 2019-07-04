@@ -5,6 +5,7 @@ const KEY = process.env.SONGKICK_KEY;
 
 // Send response of artist name and id found on the songkick API
 module.exports = getArtist = (res, artistName) => {
+  console.log("artist request");
   fetch(
     `https://api.songkick.com/api/3.0/search/artists.json?apikey=${KEY}&query=${artistName}&per_page=5`
   )
@@ -22,6 +23,7 @@ module.exports = getArtist = (res, artistName) => {
         //   "displayName",
         //   "id"
         // ]);
+        console.log("artist response");
         res.send(suggestions);
       } catch {
         res.status(400).send("No artist match");

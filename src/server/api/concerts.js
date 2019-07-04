@@ -9,6 +9,7 @@ let pageResults = [];
 
 // Send response of concert array found on the songkick API
 module.exports = getConcerts = (res, artistId) => {
+  console.log("concert request");
   // Reset pageResults so they can be repopulated
   pageResults = [];
   // Fetch first page to figure out how many pages we will have to retrieve
@@ -46,6 +47,7 @@ const compileResponse = (res, numPages, data) => {
 const processAndSend = (pageResults, res) => {
   const concerts = combinePages(pageResults);
   const geojson = getGeoJSON(fixCoords(concerts));
+  console.log("concert response");
   res.send(geojson);
 };
 

@@ -10,6 +10,7 @@ const Suggestions = ({ setArtist, suggestions, setSuggestions }) => {
             <Suggestion
               name={suggestion.name}
               id={suggestion.id}
+              key={suggestion.id}
               setArtist={setArtist}
               setSuggestions={setSuggestions}
             />
