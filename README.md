@@ -74,6 +74,7 @@ If you'd like contribute feel free to create a pull request.
 - [x] ~~Search suggestions~~
 - [ ] Grab more search suggestions (25?), only send the most popular 5 back to client
 - [ ] Loading animation
+- [ ] UI animations with [react-pose](https://github.com/Popmotion/popmotion/tree/master/packages/react-pose) 
 - [ ] Popup if search found no artist matches
 - [ ] Handle api timeouts (migrate from fetch to axios)
 
