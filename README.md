@@ -1,4 +1,4 @@
-# Artist Tour
+# Artist Map
 
 Explore band gigographies. Created with Mapbox, React, Redux, Songkick API, and Express.
 
