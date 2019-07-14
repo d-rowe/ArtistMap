@@ -1,8 +1,8 @@
-import React from "react";
-import mapboxgl from "mapbox-gl";
-import { MAPBOX_TOKEN } from "../config";
-import { connect } from "react-redux";
-import "mapbox-gl/dist/mapbox-gl.css";
+import React from 'react';
+import mapboxgl from 'mapbox-gl';
+import { MAPBOX_TOKEN } from '../config';
+import { connect } from 'react-redux';
+import 'mapbox-gl/dist/mapbox-gl.css';
 mapboxgl.accessToken = MAPBOX_TOKEN;
 
 class Map extends React.Component {
@@ -13,7 +13,7 @@ class Map extends React.Component {
       latitude: 36.5,
       longitude: -95,
       zoom: 3.5,
-      style: "mapbox://styles/mapbox/dark-v10",
+      style: 'mapbox://styles/mapbox/dark-v10',
       concerts: []
     };
     this.setGeoJSON = this.props.setGeoJSON;
@@ -44,15 +44,13 @@ class Map extends React.Component {
   }
 
   getGeoJOSN = artistId => {
-    if (artistId !== "") {
+    if (artistId !== '') {
       fetch(`api/concerts?artistId=${artistId}`)
         .then(response => response.json())
         .then(geoJSON => {
           this.setState({ geoJSON: geoJSON });
-          // Send concert data to Redux
-          this.setGeoJSON(geoJSON);
-          // Add clusters to map
-          this.addClusters();
+          this.setGeoJSON(geoJSON); // Send concert data to Redux
+          this.addClusters(); // Add clusters to map
         });
     }
   };
@@ -62,8 +60,8 @@ class Map extends React.Component {
     // Remove layers and source before adding new ones
     this.removeClusters();
 
-    map.addSource("concerts", {
-      type: "geojson",
+    map.addSource('concerts', {
+      type: 'geojson',
       data: this.state.geoJSON,
       cluster: true,
       clusterMaxZoom: 14, // Max zoom to cluster points on
@@ -71,27 +69,27 @@ class Map extends React.Component {
     });
 
     map.addLayer({
-      id: "clusters",
-      type: "circle",
-      source: "concerts",
-      filter: ["has", "point_count"],
+      id: 'clusters',
+      type: 'circle',
+      source: 'concerts',
+      filter: ['has', 'point_count'],
       paint: {
-        "circle-color": [
-          "step",
-          ["get", "point_count"],
-          "#62a1db", // Blue circle when less than 10 concerts
+        'circle-color': [
+          'step',
+          ['get', 'point_count'],
+          '#62a1db', // Blue circle when less than 10 concerts
           10,
-          "#e7d87d", // Yellow circle when between 10 and 25 concerts
+          '#e7d87d', // Yellow circle when between 10 and 25 concerts
           25,
-          "#dd9f40", // Orange circle when between 25 and 50 concerts
+          '#dd9f40', // Orange circle when between 25 and 50 concerts
           50,
-          "#b4451f", // Orangered circle when between 50 and 100 concerts
+          '#b4451f', // Orangered circle when between 50 and 100 concerts
           100,
-          "#b01111" // Red circle when more than 100 concerts
+          '#b01111' // Red circle when more than 100 concerts
         ],
-        "circle-radius": [
-          "step",
-          ["get", "point_count"],
+        'circle-radius': [
+          'step',
+          ['get', 'point_count'],
           15, // 15px circle when less than 10 concerts
           10,
           20, // 20px circle when between 10 and 25 concerts
@@ -106,56 +104,56 @@ class Map extends React.Component {
     });
 
     map.addLayer({
-      id: "cluster-count",
-      type: "symbol",
-      source: "concerts",
-      filter: ["has", "point_count"],
+      id: 'cluster-count',
+      type: 'symbol',
+      source: 'concerts',
+      filter: ['has', 'point_count'],
       layout: {
-        "text-field": "{point_count_abbreviated}",
-        "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
-        "text-size": 12
+        'text-field': '{point_count_abbreviated}',
+        'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+        'text-size': 12
       }
     });
 
     map.addLayer({
-      id: "unclustered-point",
-      type: "circle",
-      source: "concerts",
-      filter: ["!", ["has", "point_count"]],
+      id: 'unclustered-point',
+      type: 'circle',
+      source: 'concerts',
+      filter: ['!', ['has', 'point_count']],
       paint: {
-        "circle-color": "#11b4da",
-        "circle-radius": 4,
-        "circle-stroke-width": 1,
-        "circle-stroke-color": "#fff"
+        'circle-color': '#11b4da',
+        'circle-radius': 4,
+        'circle-stroke-width': 1,
+        'circle-stroke-color': '#fff'
       }
     });
   };
 
   removeClusters = () => {
     const map = this.map;
-    
-    const layers = ["clusters", "cluster-count", "unclustered-point"];
+
+    const layers = ['clusters', 'cluster-count', 'unclustered-point'];
     layers.forEach(layer => {
       if (map.getLayer(layer)) {
         map.removeLayer(layer);
       }
     });
-    
-    if (map.getSource("concerts")) {
-      map.removeSource("concerts");
+
+    if (map.getSource('concerts')) {
+      map.removeSource('concerts');
     }
   };
 
   setMouseEvents = () => {
     const map = this.map;
     // inspect a cluster on click
-    map.on("click", "clusters", function(e) {
+    map.on('click', 'clusters', function(e) {
       var features = map.queryRenderedFeatures(e.point, {
-        layers: ["clusters"]
+        layers: ['clusters']
       });
       var clusterId = features[0].properties.cluster_id;
       map
-        .getSource("concerts")
+        .getSource('concerts')
         .getClusterExpansionZoom(clusterId, function(err, zoom) {
           if (err) return;
 
@@ -166,16 +164,16 @@ class Map extends React.Component {
         });
     });
 
-    map.on("mouseenter", "clusters", function() {
-      map.getCanvas().style.cursor = "pointer";
+    map.on('mouseenter', 'clusters', function() {
+      map.getCanvas().style.cursor = 'pointer';
     });
-    map.on("mouseleave", "clusters", function() {
-      map.getCanvas().style.cursor = "";
+    map.on('mouseleave', 'clusters', function() {
+      map.getCanvas().style.cursor = '';
     });
   };
 
   render() {
-    return <div className="map" ref={el => (this.mapContainer = el)} />;
+    return <div className='map' ref={el => (this.mapContainer = el)} />;
   }
 }
 
@@ -188,7 +186,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     setGeoJSON: concertArray => {
-      dispatch({ type: "SET_CONCERTS", concerts: concertArray });
+      dispatch({ type: 'SET_CONCERTS', concerts: concertArray });
     }
   };
 };
