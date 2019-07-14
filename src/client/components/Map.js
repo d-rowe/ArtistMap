@@ -1,9 +1,8 @@
 import React from 'react';
 import mapboxgl from 'mapbox-gl';
-import { MAPBOX_TOKEN } from '../config';
 import { connect } from 'react-redux';
 import 'mapbox-gl/dist/mapbox-gl.css';
-mapboxgl.accessToken = MAPBOX_TOKEN;
+mapboxgl.accessToken = process.env.MAPBOX_TOKEN;
 
 class Map extends React.Component {
   constructor(props) {
